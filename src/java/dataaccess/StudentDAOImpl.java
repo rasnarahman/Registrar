@@ -121,6 +121,7 @@ public class StudentDAOImpl implements StudentDAO{
             student.setEnrolled(rs.getDate("enrolled"));
           
         } catch (SQLException ex) {
+            student = null;
             Logger.getLogger(StudentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
