@@ -12,7 +12,7 @@ import java.sql.Date;
  * @author rasna
  */
 public class Student {
-        private int studentNumner;
+    private int studentNumner;
     private String fName;
     private String lName;
     private Date dateOfBirth;

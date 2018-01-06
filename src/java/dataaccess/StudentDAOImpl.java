@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +23,7 @@ import transferobjects.Student;
  * @author rasna
  */
 public class StudentDAOImpl implements StudentDAO{
-    private static final String GET_ALL_STUDENTS = "SELECT student_num, first_name, last_name FROM Registrar.Students ORDER BY student_num;";
+    private static final String GET_ALL_STUDENTS = "SELECT student_num, first_name, last_name, date_birth, enrolled FROM Registrar.Students ORDER BY student_num;";
     private static final String INSERT_STUDENTS = "INSERT INTO STUDENTS (student_num,first_name,last_name, date_birth, enrolled) VALUES(?, ?, ?, ?, ?)";
     private static final String SELECT_STUDENTS_BY_ID = "SELECT student_num, first_name, last_name FROM Registrar.Students WHERE student_num=?";
     private static final String UPDATE_STUDENT = "UPDATE Registrar.Students SET first_name = ? WHERE student_num = ?";
@@ -32,6 +34,7 @@ public class StudentDAOImpl implements StudentDAO{
     //private static final String UPDATE_COURSES = "UPDATE Courses SET name = ? WHERE course_num = ?";
     //private static final String GET_BY_CODE_COURSES = "SELECT course_num, name FROM Courses WHERE name = ?";
     
+    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-mm-dd");
    
     
    @Override
@@ -41,6 +44,8 @@ public class StudentDAOImpl implements StudentDAO{
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
+         
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-mm-dd");
         try{
             DataSource ds = new DataSource();
             con = ds.createConnection();
@@ -52,31 +57,21 @@ public class StudentDAOImpl implements StudentDAO{
                 student.setStudentNumber( rs.getInt("student_num"));
                 student.setFName( rs.getString("first_name"));
                 student.setLName(rs.getString("last_name"));
+                student.setDateOfBirth(rs.getDate("date_birth"));
+                student.setEnrolled(rs.getDate("enrolled"));
                 students.add(student);
             }
         } catch (SQLException ex) {
             Logger.getLogger(StudentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                if (rs != null) {
-                    rs.close();
-                }
+                con.close();
+                rs.close();
+                pstmt.close();
+                rs.close();
+                
             } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
+                Logger.getLogger(StudentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return students;

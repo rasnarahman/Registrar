@@ -22,6 +22,8 @@ import transferobjects.Course;
  */
 public class CoursesView extends HttpServlet {
 
+    private ViewCommon viewCommon = new ViewCommon();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
@@ -30,31 +32,41 @@ public class CoursesView extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {     
+        String pageHeader = "Courses";
+   
+        CoursesLogic logic = new CoursesLogic();
+        List<Course> courses = logic.getAllCourses();
+            
+        String htmlBody = "";
+        htmlBody += "<table>";
+        htmlBody += "<tr>";
+        htmlBody += "<td>Code</td>";
+        htmlBody += "<td>Name</td>";
+        htmlBody += "</tr>";
+        for(Course course : courses){
+            htmlBody += "<tr><td>" + course.getCode() + "</td><td>" + course.getName() + "</td></tr>";
+        }
+        htmlBody += "</table>";
+        
+        response.setContentType("text/html;charset=UTF-8"); 
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Courses</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Courses View at" + request.getContextPath() + "</h1>");
-            CoursesLogic logic = new CoursesLogic();
-            List<Course> courses = logic.getAllCourses();
-            out.println("<h1>Total Courses: " + courses.size() + "</h1>");
-            out.println("<table border=\"1\">");
-            out.println("<tr>");
-            out.println("<td>Course Code</td>");
-            out.println("<td>Course Name</td>");
-            out.println("</tr>");
-            for(Course course : courses){
-                out.printf("<tr><td>%s</td><td>%s</td></tr>", course.getCode(), course.getName());
+            List<String> htmlLines = viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/CommonTemplate.html");
+
+            for(String htmlLine : htmlLines) {              
+                if(htmlLine.contains("${page_header}")) {
+                    String newLine = htmlLine.replace("${page_header}", pageHeader);
+                    htmlLine = newLine;
+                }
+                else if(htmlLine.contains("${page_content}")) {
+                    String newLine = htmlLine.replace("${page_content}", htmlBody);
+                    htmlLine = newLine;
+                }
+                out.println(htmlLine);
             }
-            out.println("</table>");
-            out.println("</body>");
-            out.println("</html>");
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
         }
     }
 

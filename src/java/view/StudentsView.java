@@ -9,6 +9,7 @@ package view;
  *
  * @author rasna
  */
+import business.CoursesLogic;
 import business.StudentsLogic;
 //import business.TuitionLogic;
 import dataaccess.StudentDAOImpl;
@@ -23,6 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import transferobjects.Course;
 import transferobjects.Student;
 //mport transferobjects.Tuition;
 
@@ -32,6 +34,8 @@ import transferobjects.Student;
  */
 public class StudentsView extends HttpServlet {
 
+    private ViewCommon viewCommon = new ViewCommon();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
@@ -41,30 +45,50 @@ public class StudentsView extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void getAllStudentsView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        String pageHeader = "Students";
+   
+        StudentsLogic logic = new StudentsLogic();
+        List<Student> students = logic.getAllStudents();
+            
+        String htmlBody = "";
+        htmlBody += "<table>";
+        htmlBody += "<tr>";
+        htmlBody += "<td>Student Number</td>";
+        htmlBody += "<td>First Name</td>";
+        htmlBody += "<td>Last Name</td>";
+        htmlBody += "<td>DOB</td>";
+        htmlBody += "<td>Enrolment Date</td>";
+        htmlBody += "</tr>";
+        for(Student student : students){
+            htmlBody += 
+                    "<tr>" +
+                    "<td>" + student.getStudentNum() + "</td>" +
+                    "<td>" + student.getFName() + "</td>" +
+                    "<td>" + student.getLName() + "</td>" +
+                    "<td>" + student.getDateOfBirth() + "</td>" +
+                    "<td>" + student.getEnrolled() + "</td>" +
+                    "</tr>";
+        }
+        htmlBody += "</table>";
+        
+        response.setContentType("text/html;charset=UTF-8"); 
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Students</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Students View at " + request.getContextPath() + "</h1>");
-            StudentsLogic logic = new StudentsLogic();
-            List<Student> students = logic.getAllStudents();
-            out.println("<table border=\"1\">");
-            out.println("<tr>");
-            out.println("<td>Student Number</td>");
-            out.println("<td>First Name</td>");
-            out.println("<td>Last Name</td>");
-            out.println("</tr>");
-            for(Student student : students){
-                out.printf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", student.getStudentNum(), student.getFName(),student.getLName());
+            List<String> htmlLines = viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/CommonTemplate.html");
+
+            for(String htmlLine : htmlLines) {              
+                if(htmlLine.contains("${page_header}")) {
+                    String newLine = htmlLine.replace("${page_header}", pageHeader);
+                    htmlLine = newLine;
+                }
+                else if(htmlLine.contains("${page_content}")) {
+                    String newLine = htmlLine.replace("${page_content}", htmlBody);
+                    htmlLine = newLine;
+                }
+                out.println(htmlLine);
             }
-            out.println("</table>");
-            out.println("</body>");
-            out.println("</html>");
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
         }
     }
     
