@@ -8,6 +8,25 @@
         <servlet-name>CoursesView</servlet-name>
         <url-pattern>/Courses</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>StudentsView</servlet-name>
+        <servlet-class>view.StudentsView</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StudentsView</servlet-name>
+        <url-pattern>/students</url-pattern>
+    </servlet-mapping>
+    
+         <servlet>
+        <servlet-name>UIStudentView</servlet-name>
+        <servlet-class>view.UIStudentView</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UIStudentView</servlet-name>
+        <url-pattern>/uistudentview/*</url-pattern>
+    </servlet-mapping>
+ 
     <resource-ref>
         <description>DB Connection</description>
         <res-ref-name>jdbc/Registrar</res-ref-name>
