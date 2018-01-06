@@ -26,7 +26,7 @@ public class StudentDAOImpl implements StudentDAO{
     private static final String GET_ALL_STUDENTS = "SELECT student_num, first_name, last_name, date_birth, enrolled FROM Registrar.Students ORDER BY student_num;";
     private static final String INSERT_STUDENTS = "INSERT INTO STUDENTS (student_num,first_name,last_name, date_birth, enrolled) VALUES(?, ?, ?, ?, ?)";
     private static final String SELECT_STUDENTS_BY_ID = "SELECT student_num, first_name, last_name, date_birth, enrolled FROM Registrar.Students WHERE student_num=?";
-    private static final String UPDATE_STUDENT = "UPDATE Registrar.Students SET first_name = ? WHERE student_num = ?";
+    private static final String UPDATE_STUDENT = "UPDATE Registrar.Students SET first_name = ?, last_name = ?  WHERE student_num = ?";
     private static final String DELETE_STUDENT = "DELETE FROM Registrar.Students WHERE student_num = ?";
     
 
@@ -150,7 +150,7 @@ public class StudentDAOImpl implements StudentDAO{
     }
 
     @Override
-    public void updateStudent(Integer studentnumber, String firstName) {
+    public void updateStudent(Integer studentnumber, String firstName, String lastName) {
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -159,7 +159,8 @@ public class StudentDAOImpl implements StudentDAO{
             con = ds.createConnection();    
             pstmt = con.prepareStatement(UPDATE_STUDENT);
             pstmt.setString(1,firstName);
-            pstmt.setInt(2,studentnumber);
+            pstmt.setString(2,lastName);
+            pstmt.setInt(3,studentnumber);
             
             pstmt.executeUpdate();
             

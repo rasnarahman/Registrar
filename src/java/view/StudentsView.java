@@ -146,24 +146,19 @@ public class StudentsView extends HttpServlet {
     protected void updateStudentById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
          response.setContentType("text/html;charset=UTF-8");
          try (PrintWriter out = response.getWriter()) {
-             int studentNumber = Integer.parseInt(request.getParameter("studentNumber"));
-             String firstName = request.getParameter("fName");
-             StudentsLogic logic = new StudentsLogic();
-             logic.updateStudentFirstName(studentNumber,firstName);
-            
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Student information serach by id</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Students View at " + request.getContextPath() + "</h1>");
-            out.print("<h3> student information is updated </h3>");
-            out.println("</body>");
-            out.println("</html>");
+            int studentNumber = Integer.parseInt(request.getParameter("studentNumber"));
+            String firstName = request.getParameter("fName");
+            String lastName = request.getParameter("lName");
+            StudentsLogic logic = new StudentsLogic();
+            logic.updateStudentFirstName(studentNumber,firstName, lastName);
+
+            Student student = logic.findStudentById(studentNumber);
+             
+            List<Student> students = new ArrayList<Student>();
+            students.add(student);
+            displayStudents(students, request, response);
         }catch(Exception e){
-             System.out.println("something wrong");
+             System.out.println(e.toString());
              
          }
     }

@@ -52,8 +52,8 @@ public class StudentsLogic {
         return studentDAO.getStudentByStudentNumber(studentNum);
     }
     
-    public void updateStudentFirstName(int studentNumber, String firstName){
-        studentDAO.updateStudent(studentNumber, firstName);
+    public void updateStudentFirstName(int studentNumber, String firstName, String lastName){
+        studentDAO.updateStudent(studentNumber, firstName, lastName);
     }
     
     public boolean deleteStudentById(int studentNumber){

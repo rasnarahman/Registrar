@@ -5,6 +5,8 @@
  */
 package view;
 
+import dataaccess.CourseDAO;
+import dataaccess.CourseDAOImpl;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import transferobjects.Course;
 
 /**
  *
@@ -25,11 +28,24 @@ public class UIStudentView extends HttpServlet{
     private ViewCommon viewCommon = new ViewCommon();
     
     protected void generateNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");   
+        response.setContentType("text/html;charset=UTF-8");  
+        String courseOptionTagInString = "";
+        CourseDAO courseDao = new CourseDAOImpl();
+        List<Course> courseList = courseDao.getAllCourses();
+        for(Course course: courseList) {
+            courseOptionTagInString += "<option>" + course.getName() + "</option>";
+        }
+        
         try (PrintWriter out = response.getWriter()) {
-            viewCommon.populateWebPageFromHtml(
-                    viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/AddStudent.html"),
-                    out);
+            List<String> htmlLines = viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/AddStudent.html");
+
+            for(String htmlLine : htmlLines) {              
+                if(htmlLine.contains("${dropdown_options}")) {
+                    String newLine = htmlLine.replace("${dropdown_options}", courseOptionTagInString);
+                    htmlLine = newLine;
+                }
+                out.println(htmlLine);
+            }
         }
         catch(Exception ex) {
             ex.printStackTrace();
