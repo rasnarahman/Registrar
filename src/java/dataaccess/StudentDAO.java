@@ -17,5 +17,5 @@ public interface StudentDAO {
     void addStudent(Student student);
     Student getStudentByStudentNumber(Integer studentnumber);
     void updateStudent(Integer studentNumber, String fName);
-    void deleteStudent(Integer studentNumber);
+    boolean deleteStudent(Integer studentNumber);
 }

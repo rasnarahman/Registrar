@@ -26,7 +26,8 @@ public class TuitionDAOImpl implements TuitionDAO{
     private static final String DELETE_COURSES = "DELETE FROM Courses WHERE course_num = ?";
     private static final String UPDATE_PAID = "UPDATE Registrar.Tuition SET paid = ? WHERE student_num = ?;";
     private static final String GET_BY_CODE_COURSES = "SELECT course_num, name FROM Courses WHERE name = ?";
-
+    private static final String DELETE_TUITION = "DELETE FROM Registrar.tuition WHERE student_num = ?";
+    
     @Override
     public List<Tuition> getAllTuitions() {
         List<Tuition> tuitions = Collections.EMPTY_LIST;
@@ -138,17 +139,48 @@ public class TuitionDAOImpl implements TuitionDAO{
         }   
     }
 
-
-    
- 
-    /**
-     * 
-     * @param studentNumber 
-     * @Override
-    public void deleteTUition(Integer studentNumber) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Override
+    public boolean deleteTuition(Integer studentNumber) {
+        boolean deleteSuccessful = true;
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try{
+            DataSource ds = new DataSource();
+            con = ds.createConnection();    
+            pstmt = con.prepareStatement(DELETE_TUITION);
+            pstmt.setDouble(1,studentNumber);
+            
+            pstmt.executeUpdate();
+            
+        } catch (SQLException ex) {
+            deleteSuccessful = false;
+            Logger.getLogger(StudentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+            try {
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }  
+        return deleteSuccessful;
     }
-     */
     
 
     }

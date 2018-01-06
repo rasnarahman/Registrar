@@ -17,5 +17,5 @@ public interface TuitionDAO {
     void addTuition(Tuition tuition);
     //Tuition getStudentByStudentNumber(Integer studentnumber);
     void updateTuition(Integer studentnumber, double paid);
-    //void deleteTUition(Integer studentNumber);
+    boolean deleteTuition(Integer studentNumber);
   }

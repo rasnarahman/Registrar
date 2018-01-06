@@ -25,7 +25,7 @@ import transferobjects.Student;
 public class StudentDAOImpl implements StudentDAO{
     private static final String GET_ALL_STUDENTS = "SELECT student_num, first_name, last_name, date_birth, enrolled FROM Registrar.Students ORDER BY student_num;";
     private static final String INSERT_STUDENTS = "INSERT INTO STUDENTS (student_num,first_name,last_name, date_birth, enrolled) VALUES(?, ?, ?, ?, ?)";
-    private static final String SELECT_STUDENTS_BY_ID = "SELECT student_num, first_name, last_name FROM Registrar.Students WHERE student_num=?";
+    private static final String SELECT_STUDENTS_BY_ID = "SELECT student_num, first_name, last_name, date_birth, enrolled FROM Registrar.Students WHERE student_num=?";
     private static final String UPDATE_STUDENT = "UPDATE Registrar.Students SET first_name = ? WHERE student_num = ?";
     private static final String DELETE_STUDENT = "DELETE FROM Registrar.Students WHERE student_num = ?";
     
@@ -117,7 +117,8 @@ public class StudentDAOImpl implements StudentDAO{
             student.setStudentNumber( rs.getInt("student_num"));
             student.setFName( rs.getString("first_name"));
             student.setLName(rs.getString("last_name"));
-                
+            student.setDateOfBirth(rs.getDate("date_birth"));
+            student.setEnrolled(rs.getDate("enrolled"));
           
         } catch (SQLException ex) {
             Logger.getLogger(StudentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -189,7 +190,19 @@ public class StudentDAOImpl implements StudentDAO{
     }
 
     @Override
-    public void deleteStudent(Integer studentNumber) {
+    public boolean deleteStudent(Integer studentNumber) {
+        Student student = getStudentByStudentNumber(studentNumber);
+        if(student == null) {
+            return false;
+        }
+        
+        TuitionDAO tuitionDao = new TuitionDAOImpl();
+        boolean tuitionDeleteSuccessfull = tuitionDao.deleteTuition(studentNumber);
+        if(!tuitionDeleteSuccessfull) {
+            return false;
+        }
+        
+        boolean deleteResultSuccessfull = true;
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -197,11 +210,11 @@ public class StudentDAOImpl implements StudentDAO{
             DataSource ds = new DataSource();
             con = ds.createConnection();    
             pstmt = con.prepareStatement(DELETE_STUDENT);
-            pstmt.setInt(1,studentNumber);
-            
+            pstmt.setInt(1,studentNumber);            
             pstmt.executeUpdate();
             
         } catch (SQLException ex) {
+            deleteResultSuccessfull = false;
             Logger.getLogger(StudentDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -226,6 +239,7 @@ public class StudentDAOImpl implements StudentDAO{
                 System.out.println(ex.getMessage());
             }
         }
+        return deleteResultSuccessfull;
     }
  
 }

@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import javax.servlet.ServletException;
@@ -46,12 +47,9 @@ public class StudentsView extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
-    private void displayAllStudents(HttpServletRequest request, HttpServletResponse response){
+    private void displayStudents(List<Student> students, HttpServletRequest request, HttpServletResponse response){
         String pageHeader = "Students";
-   
-        StudentsLogic logic = new StudentsLogic();
-        List<Student> students = logic.getAllStudents();
-            
+           
         String htmlBody = "";
         htmlBody += "<table>";
         htmlBody += "<tr>";
@@ -95,7 +93,9 @@ public class StudentsView extends HttpServlet {
     }
     
     protected void getAllStudentsView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        displayAllStudents(request, response);
+        StudentsLogic logic = new StudentsLogic();
+        List<Student> students = logic.getAllStudents();
+        displayStudents(students, request, response);
     }
     
     
@@ -117,7 +117,8 @@ public class StudentsView extends HttpServlet {
             StudentsLogic logic = new StudentsLogic();
             logic.addStudent(student, tuition);
             
-            displayAllStudents(request, response);
+            List<Student> students = logic.getAllStudents();
+            displayStudents(students, request, response);
            
         }catch(Exception e){
             System.out.println("exception occured");
@@ -128,31 +129,12 @@ public class StudentsView extends HttpServlet {
          response.setContentType("text/html;charset=UTF-8");
          try (PrintWriter out = response.getWriter()) {
              int studentNumber = Integer.parseInt(request.getParameter("studentNumber"));
-             //StudentDAOImpl studentDAOImpl = new StudentDAOImpl();
-             //Student student = studentDAOImpl.getStudentByStudentNumber(studentNumber);
              StudentsLogic logic = new StudentsLogic();
              Student student = logic.findStudentById(studentNumber);
              
-            
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Student information serach by id</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Students View at " + request.getContextPath() + "</h1>");
-            
-            out.println("<table border=\"1\">");
-            out.println("<tr>");
-            out.println("<td>Student Number</td>");
-            out.println("<td>First Name</td>");
-            out.println("<td>Last Name</td>");
-            out.println("</tr>");
-            out.printf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", student.getStudentNum(), student.getFName(),student.getLName());
-            out.println("</table>");
-            out.println("</body>");
-            out.println("</html>");
+            List<Student> students = new ArrayList<Student>();
+            students.add(student);
+            displayStudents(students, request, response);
         }catch(Exception e){
              System.out.println("something wrong");
              
@@ -191,23 +173,28 @@ public class StudentsView extends HttpServlet {
          response.setContentType("text/html;charset=UTF-8");
          try (PrintWriter out = response.getWriter()) {
              int studentNumber = Integer.parseInt(request.getParameter("studentNumber"));
-             //String firstName = request.getParameter("fName");
              StudentsLogic logic = new StudentsLogic();
-             logic.deleteStudentById(studentNumber);
+             boolean resultSuccessful = logic.deleteStudentById(studentNumber);
              
-            
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Student Delete confirmation page</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Students View at " + request.getContextPath() + "</h1>");
-            
-            out.print("<h3> student is deleted. </h3>");
-            out.println("</body>");
-            out.println("</html>");
+            List<String> htmlLines = viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/CommonTemplate.html");
+
+            for(String htmlLine : htmlLines) {              
+                if(htmlLine.contains("${page_header}")) {
+                    String newLine = htmlLine.replace("${page_header}", "Delete Result");
+                    htmlLine = newLine;
+                }
+                else if(htmlLine.contains("${page_content}")) {
+                    String newLine = "";
+                    if(resultSuccessful) {
+                        newLine = htmlLine.replace("${page_content}", "Student has been deleted!");
+                    }
+                    else {
+                        newLine = htmlLine.replace("${page_content}", "Student delete failed!");
+                    }
+                    htmlLine = newLine;
+                }
+                out.println(htmlLine);
+            }
         }catch(Exception e){
              System.out.println("something wrong");
              
