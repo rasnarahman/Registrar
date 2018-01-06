@@ -35,6 +35,7 @@ import transferobjects.Student;
 public class StudentsView extends HttpServlet {
 
     private ViewCommon viewCommon = new ViewCommon();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -44,7 +45,8 @@ public class StudentsView extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void getAllStudentsView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    
+    private void displayAllStudents(HttpServletRequest request, HttpServletResponse response){
         String pageHeader = "Students";
    
         StudentsLogic logic = new StudentsLogic();
@@ -92,55 +94,33 @@ public class StudentsView extends HttpServlet {
         }
     }
     
+    protected void getAllStudentsView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        displayAllStudents(request, response);
+    }
+    
     
     
     protected void createNewStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            // read form fields
+        try {
             int studentNumber = Integer.parseInt(request.getParameter("studentNumber"));
             String firstName = request.getParameter("fName");
             String lastName = request.getParameter("lName");
             String DOB = request.getParameter("dob");
             double tuition = Double.parseDouble(request.getParameter("tuition"));
-            
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+                   
             java.util.Date date = sdf.parse(DOB);
             java.sql.Date sqlDOBDate = new Date(date.getTime());
-            //System.out.println("String converted to java.sql.Date :" + sqlDate);
             
-            Date enrolled = new Date(new java.util.Date().getTime());
-     
+            Date enrolled = new Date(new java.util.Date().getTime());   
             Student student = new Student(studentNumber,firstName,lastName,sqlDOBDate,enrolled);
             
             StudentsLogic logic = new StudentsLogic();
             logic.addStudent(student, tuition);
             
-           
-
-            
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Student information serach by id</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>New student information at " + request.getContextPath() + "</h1>");
-            
-            out.println("<table border=\"1\">");
-            out.println("<tr>");
-            out.println("<td>Student Number</td>");
-            out.println("<td>First Name</td>");
-            out.println("<td>Last Name</td>");
-            out.println("</tr>");
-            out.printf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", student.getStudentNum(), student.getFName(),student.getLName());
-            out.println("</table>");
-            out.println("</body>");
-            out.println("</html>");
+            displayAllStudents(request, response);
            
         }catch(Exception e){
-            System.out.println("exception happens");
+            System.out.println("exception occured");
         }
     } 
     
