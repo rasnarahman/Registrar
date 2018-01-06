@@ -1,8 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-  @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic);
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic);
 * {
   margin: 0;
   padding: 0;
@@ -32,7 +28,6 @@ body {
   position: relative;
 }
 
-#contact select,
 #contact input[type="text"],
 #contact input[type="email"],
 #contact input[type="tel"],
@@ -71,7 +66,6 @@ fieldset select {
   width: 100%;
 }
 
-#contact select,
 #contact input[type="text"],
 #contact input[type="email"],
 #contact input[type="tel"],
@@ -84,7 +78,6 @@ fieldset select {
   padding: 10px;
 }
 
-#contact select:hover,
 #contact input[type="text"]:hover,
 #contact input[type="email"]:hover,
 #contact input[type="tel"]:hover,
@@ -149,41 +142,3 @@ fieldset select {
 :-ms-input-placeholder {
   color: #888;
 }
-  </style>
-</head>
-<body>
-<div class="container">  
-  <form id="contact" action="/Registrar/students" method="post">
-    <h3>Add Student</h3>
-    <fieldset>
-      <input placeholder="Student Number" type=text name="studentNumber" id="studentNumber" required>
-    </fieldset>
-    <fieldset>
-      <input placeholder="First Name" type="text" name="fName" id="fName" tabindex="2" required>
-    </fieldset>
-    <fieldset>
-      <input placeholder="Last Name" name="lName" id="lName" type="text" tabindex="3" required>
-    </fieldset>
-    <fieldset>
-        <select name="Course" tabindex="3" required>
-            <option value="-1" selected>Courses...</option>
-            <option value="MAT8001C">Technical Math for Computer Science</option>
-            <option value="CST8101">Computer Essentials</option>
-            <option value="CST8300">Achieving Success in Changing Environments</option>
-            <option value="CST8110">Intro to Computer Programing</option>
-        </select>
-    </fieldset>
-    <fieldset>
-      <input placeholder="DOB" name="dob" id="dob" type="text" tabindex="3" required>
-    </fieldset>
-    <fieldset>
-      <input placeholder="Tuition" name="tuition" id="tuition" type="text" tabindex="3" required>
-    </fieldset>
-    <fieldset>
-      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
-    </fieldset>
-    <p class="copyright">Designed by Rasna Rahman</p>
-  </form>
-</div>
-</body>
-</html>
