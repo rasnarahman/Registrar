@@ -25,10 +25,11 @@ public class UIStudentView extends HttpServlet{
     private ViewCommon viewCommon = new ViewCommon();
     
     protected void generateNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        List<String> htmlFileLines = viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/AddStudent.html");   
+        response.setContentType("text/html;charset=UTF-8");   
         try (PrintWriter out = response.getWriter()) {
-            viewCommon.populateWebPageFromHtml(htmlFileLines, out);
+            viewCommon.populateWebPageFromHtml(
+                    viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/AddStudent.html"),
+                    out);
         }
         catch(Exception ex) {
             ex.printStackTrace();
@@ -36,76 +37,40 @@ public class UIStudentView extends HttpServlet{
 
     }
     
-   
-    
-    
     protected void generateSearchForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         response.setContentType("text/html;charset=UTF-8");
-         try (PrintWriter out = response.getWriter()) {
-             ClassLoader classLoader = getClass().getClassLoader();
-             File file = new File(classLoader.getResource("html/student_search_by_id_form.html").getFile());
-            
-            try (Scanner scanner = new Scanner(file)) {
-
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine();		
-                        out.println(line + "\n");
-		}
-		scanner.close();
-	        } catch (IOException e) {
-		e.printStackTrace();
-	       }
-             
-         }catch(Exception e){
-             System.out.println("something wrong");
-             
-         }
+        try (PrintWriter out = response.getWriter()) {
+            viewCommon.populateWebPageFromHtml(
+                    viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/SearchStudent.html"),
+                    out);
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
     
     protected void generateUpdateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         response.setContentType("text/html;charset=UTF-8");
-         try (PrintWriter out = response.getWriter()) {
-             ClassLoader classLoader = getClass().getClassLoader();
-             File file = new File(classLoader.getResource("html/student_update_by_id_form.html").getFile());
-            
-            try (Scanner scanner = new Scanner(file)) {
-
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine();		
-                        out.println(line + "\n");
-		}
-		scanner.close();
-	        } catch (IOException e) {
-		e.printStackTrace();
-	       }
-             
-         }catch(Exception e){
-             System.out.println("something wrong");
-             
-         }
+        try (PrintWriter out = response.getWriter()) {
+            viewCommon.populateWebPageFromHtml(
+                    viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/UpdateStudent.html"),
+                    out);
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
     
     protected void generateDeleteForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         response.setContentType("text/html;charset=UTF-8");
-         try (PrintWriter out = response.getWriter()) {
-             ClassLoader classLoader = getClass().getClassLoader();
-             File file = new File(classLoader.getResource("html/student_delete_by_id_form.html").getFile());
-            
-            try (Scanner scanner = new Scanner(file)) {
-
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine();		
-                        out.println(line + "\n");
-		}
-		scanner.close();
-	        } catch (IOException e) {
-		e.printStackTrace();
-	       }
-             
-         }catch(Exception e){
-             System.out.println("something wrong");
-             
-         }
+        try (PrintWriter out = response.getWriter()) {
+            viewCommon.populateWebPageFromHtml(
+                    viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/DeleteStudent.html"),
+                    out);
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
