@@ -166,9 +166,38 @@ fieldset select {
 :-ms-input-placeholder {
   color: #888;
 }
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
   </style>
 </head>
 <body>
+<div class="topnav">
+    <a href="http://localhost:8084/Registrar/">Home</a>
+    <a href="Courses">Courses</a>
+    <a href="students">Students</a>
+</div>
 <div class="container">  
   <form id="contact" action="${action_Page_link}" method="post">
     <h3>${page_header}</h3>
