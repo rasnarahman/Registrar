@@ -27,6 +27,8 @@ public class TuitionDAOImpl implements TuitionDAO{
     private static final String UPDATE_PAID = "UPDATE Registrar.Tuition SET paid = ? WHERE student_num = ?;";
     private static final String GET_BY_CODE_COURSES = "SELECT course_num, name FROM Courses WHERE name = ?";
     private static final String DELETE_TUITION = "DELETE FROM Registrar.tuition WHERE student_num = ?";
+    private static final String GET_TUITION_BY_STUDENT_NUMBER = "SELECT student_num, paid, remainder FROM Registrar.Tuition WHERE student_num=?";
+
     
     @Override
     public List<Tuition> getAllTuitions() {
@@ -74,6 +76,51 @@ public class TuitionDAOImpl implements TuitionDAO{
             }
         }
         return tuitions;
+    }
+    
+    public Tuition getTuitionByStudentNumber(Integer studentnumber){
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Tuition tuition = null;
+        try{
+            DataSource ds = new DataSource();
+            con = ds.createConnection();
+            pstmt = con.prepareStatement( GET_TUITION_BY_STUDENT_NUMBER);
+            pstmt.setInt(1,studentnumber);
+            rs = pstmt.executeQuery();
+            while( rs.next()){
+                tuition = new Tuition();
+                tuition.setStudentNum(rs.getInt("student_num"));
+                tuition.setPaid(rs.getDouble("paid"));
+                tuition.setRemainder(rs.getDouble("remainder"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+            try {
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return tuition;
     }
 
     /**

@@ -7,6 +7,7 @@ package dataaccess;
 
 import java.util.List;
 import transferobjects.Course;
+import transferobjects.CourseRegistration;
 
 /**
  *
@@ -15,8 +16,7 @@ import transferobjects.Course;
 public interface CourseDAO {
 	List<Course> getAllCourses();
 	void addCourse(Course author);
-	//List<Course> getAuthorsByFirstName(String firstName);
-	//Course getAuthorByAuthorId(Integer authorID);
-	//void updateAuthor(Course author);
-	//void deleteAuthor(Course author);
+        void registerCourse(int sudentNumber, String courseNumber, String term, int year);
+        List<CourseRegistration> getCourseRegistrationByStudentNumber(int studentNumber);
+        Course getCourseByCourseNumber(String courseNumber);
 }

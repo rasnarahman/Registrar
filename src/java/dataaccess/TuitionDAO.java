@@ -15,7 +15,7 @@ import transferobjects.Tuition;
 public interface TuitionDAO {
     List<Tuition> getAllTuitions();
     void addTuition(Tuition tuition);
-    //Tuition getStudentByStudentNumber(Integer studentnumber);
+    Tuition getTuitionByStudentNumber(Integer studentnumber);
     void updateTuition(Integer studentnumber, double paid);
     boolean deleteTuition(Integer studentNumber);
   }

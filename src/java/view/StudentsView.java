@@ -11,8 +11,12 @@ package view;
  */
 import business.CoursesLogic;
 import business.StudentsLogic;
+import dataaccess.CourseDAO;
+import dataaccess.CourseDAOImpl;
 //import business.TuitionLogic;
 import dataaccess.StudentDAOImpl;
+import dataaccess.TuitionDAO;
+import dataaccess.TuitionDAOImpl;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,7 +30,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import transferobjects.Course;
+import transferobjects.CourseRegistration;
 import transferobjects.Student;
+import transferobjects.Tuition;
 //mport transferobjects.Tuition;
 
 /**
@@ -47,9 +53,7 @@ public class StudentsView extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
-    private void displayStudents(List<Student> students, HttpServletRequest request, HttpServletResponse response){
-        String pageHeader = "Students";
-           
+    private String getStudentHtmlBody(List<Student> students){
         String htmlBody = "";
         htmlBody += "<table>";
         htmlBody += "<tr>";
@@ -70,6 +74,53 @@ public class StudentsView extends HttpServlet {
                     "</tr>";
         }
         htmlBody += "</table>";
+        return htmlBody;
+    }
+    
+    private String getTuitionHtmlBody(Tuition tuition){
+        String htmlBody = "";
+        htmlBody += "<table>";
+        htmlBody += "<tr>";
+        htmlBody += "<td>Tuition Paid</td>";
+        htmlBody += "<td>Tuition Remainder</td>";
+        htmlBody += "</tr>";
+        htmlBody += "<tr>";
+        htmlBody += "<td>" + tuition.getPaid() + "</td>";
+        htmlBody += "<td>" + tuition.getRemainder() + "</td>" ;
+        htmlBody += "</tr>";
+        htmlBody += "</table>";
+        return htmlBody;
+    }
+    
+    
+    private String getCourseRegistrationHtmlBody(List<CourseRegistration> courseRegistrations){
+        String htmlBody = "";
+        htmlBody += "<table>";
+        htmlBody += "<tr>";
+        htmlBody += "<td>Course Number</td>";
+        htmlBody += "<td>Course Name</td>";
+        htmlBody += "<td>Term</td>";
+        htmlBody += "<td>Year</td>";
+        htmlBody += "</tr>";
+        
+        for(CourseRegistration courseRegistration: courseRegistrations) {
+            htmlBody += "<tr>";
+            htmlBody += "<td>" + courseRegistration.getCourse().getCode() + "</td>";
+            htmlBody += "<td>" + courseRegistration.getCourse().getName()+ "</td>" ;
+            htmlBody += "<td>" + courseRegistration.getTerm()+ "</td>" ;
+            htmlBody += "<td>" + courseRegistration.getYear()+ "</td>" ;
+            htmlBody += "</tr>";          
+        }
+        
+        htmlBody += "</table>";
+
+        return htmlBody;
+    }
+    
+    private void displayStudents(List<Student> students, HttpServletRequest request, HttpServletResponse response){
+        String pageHeader = "Students";
+           
+        String htmlBody = getStudentHtmlBody(students);
         
         response.setContentType("text/html;charset=UTF-8"); 
         try (PrintWriter out = response.getWriter()) {
@@ -132,13 +183,45 @@ public class StudentsView extends HttpServlet {
              StudentsLogic logic = new StudentsLogic();
              Student student = logic.findStudentById(studentNumber);
              
+             TuitionDAO tuitionDao = new TuitionDAOImpl();
+             Tuition tuition = tuitionDao.getTuitionByStudentNumber(studentNumber);
+          
+             
             List<Student> students = new ArrayList<Student>();
             students.add(student);
-            displayStudents(students, request, response);
-        }catch(Exception e){
-             System.out.println("something wrong");
-             
-         }
+            String studentHtmlBody = getStudentHtmlBody(students);
+            String tuitionHtmlBody = getTuitionHtmlBody(tuition);
+            
+            CourseDAO courseDao = new CourseDAOImpl();
+            List<CourseRegistration> courseRegistrations = courseDao.getCourseRegistrationByStudentNumber(studentNumber);
+            String courseRegistrationHtml = getCourseRegistrationHtmlBody(courseRegistrations);
+            
+            String finalHtmlBody =
+                    studentHtmlBody + 
+                    "<br/>" + 
+                    "<h3>Tuition</h3>" + 
+                    tuitionHtmlBody +
+                    "<br/>" + 
+                    "<h3>Courses</h3>" + 
+                    courseRegistrationHtml;
+            
+            List<String> htmlLines = viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/CommonTemplate.html");
+
+            for(String htmlLine : htmlLines) {              
+                if(htmlLine.contains("${page_header}")) {
+                    String newLine = htmlLine.replace("${page_header}", "Student");
+                    htmlLine = newLine;
+                }
+                else if(htmlLine.contains("${page_content}")) {
+                    String newLine = htmlLine.replace("${page_content}", finalHtmlBody);
+                    htmlLine = newLine;
+                }
+                out.println(htmlLine);
+            }
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
     
     

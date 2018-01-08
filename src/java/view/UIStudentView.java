@@ -27,30 +27,16 @@ public class UIStudentView extends HttpServlet{
     
     private ViewCommon viewCommon = new ViewCommon();
     
-    protected void generateNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");  
-        String courseOptionTagInString = "";
-        CourseDAO courseDao = new CourseDAOImpl();
-        List<Course> courseList = courseDao.getAllCourses();
-        for(Course course: courseList) {
-            courseOptionTagInString += "<option>" + course.getName() + "</option>";
-        }
-        
+    protected void generateNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {        
+        response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            List<String> htmlLines = viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/AddStudent.html");
-
-            for(String htmlLine : htmlLines) {              
-                if(htmlLine.contains("${dropdown_options}")) {
-                    String newLine = htmlLine.replace("${dropdown_options}", courseOptionTagInString);
-                    htmlLine = newLine;
-                }
-                out.println(htmlLine);
-            }
+            viewCommon.populateWebPageFromHtml(
+                    viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/AddStudent.html"),
+                    out);
         }
         catch(Exception ex) {
             ex.printStackTrace();
         }
-
     }
     
     protected void generateSearchForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

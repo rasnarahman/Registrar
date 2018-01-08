@@ -6,7 +6,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>CoursesView</servlet-name>
-        <url-pattern>/Courses</url-pattern>
+        <url-pattern>/Courses/*</url-pattern>
     </servlet-mapping>
 
     <servlet>

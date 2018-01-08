@@ -6,6 +6,8 @@
 package view;
 
 import business.CoursesLogic;
+import dataaccess.CourseDAO;
+import dataaccess.CourseDAOImpl;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -69,6 +71,60 @@ public class CoursesView extends HttpServlet {
             ex.printStackTrace();
         }
     }
+    
+    protected void generateRegisterCourseForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        response.setContentType("text/html;charset=UTF-8");  
+        String courseOptionTagInString = "";
+        CourseDAO courseDao = new CourseDAOImpl();
+        List<Course> courseList = courseDao.getAllCourses();
+        for(Course course: courseList) {
+            courseOptionTagInString += "<option value='" + course.getCode() + "'>" + course.getName() + "</option>";
+        }
+        
+        try (PrintWriter out = response.getWriter()) {
+            List<String> htmlLines = viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/RegisterCourse.html");
+
+            for(String htmlLine : htmlLines) {              
+                if(htmlLine.contains("${dropdown_options}")) {
+                    String newLine = htmlLine.replace("${dropdown_options}", courseOptionTagInString);
+                    htmlLine = newLine;
+                }
+                out.println(htmlLine);
+            }
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    
+    public void registerStudentCourse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        int studentNumber = Integer.parseInt(request.getParameter("studentNumber"));
+        String course = request.getParameter("Course");
+        String term = request.getParameter("term");
+        int year = Integer.parseInt(request.getParameter("year"));
+        
+        CourseDAO courseDao = new CourseDAOImpl();
+        courseDao.registerCourse(studentNumber, course, term, year);
+        
+        response.setContentType("text/html;charset=UTF-8");
+         try (PrintWriter out = response.getWriter()) {
+             List<String> htmlLines = viewCommon.getFileContentsFromSamePackageProjectFile("ResourceFiles/CommonTemplate.html");
+
+            for(String htmlLine : htmlLines) {              
+                if(htmlLine.contains("${page_header}")) {
+                    String newLine = htmlLine.replace("${page_header}", "Register Result");
+                    htmlLine = newLine;
+                }
+                else if(htmlLine.contains("${page_content}")) {
+                    String newLine = "";
+                    newLine = htmlLine.replace("${page_content}", "Registered for course!");
+                    htmlLine = newLine;
+                }
+                out.println(htmlLine);
+            }
+         }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -81,7 +137,14 @@ public class CoursesView extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
+        
+        String pathInfo = request.getPathInfo();
+        if(pathInfo == null || pathInfo == "//"){
+                processRequest(request, response);
+        }
+        if(pathInfo.equals("/register_course") ){
+                generateRegisterCourseForm(request, response);
+        }
     }
 
     /**
@@ -93,8 +156,15 @@ public class CoursesView extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {            
+        String pathInfo = request.getPathInfo();
+        
+        if(pathInfo == null || pathInfo == "//"){
+                 processRequest(request, response);
+        }
+        if(pathInfo.equals("/Courses/register")) {
+            registerStudentCourse(request, response);
+        }
     }
 
     /**

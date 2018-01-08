@@ -199,22 +199,26 @@ fieldset select {
     <a href="students">Students</a>
 </div>
 <div class="container">  
-  <form id="contact" action="/Registrar/students" method="post">
-    <h3>Add Student</h3>
+  <form id="contact" action="Courses/register" method="post">
+    <h3>Register Course</h3>
     <fieldset>
       <input placeholder="Student Number" type=text name="studentNumber" id="studentNumber" required>
     </fieldset>
     <fieldset>
-      <input placeholder="First Name" type="text" name="fName" id="fName" tabindex="2" required>
+        <select name="Course" tabindex="3" required>
+            ${dropdown_options}
+        </select>
     </fieldset>
     <fieldset>
-      <input placeholder="Last Name" name="lName" id="lName" type="text" tabindex="3" required>
+        <select name="term" tabindex="3" required>
+            <option selected disabled>-- Term --</option>
+            <option value='F'>Fall</option>
+            <option value='W'>Winter</option>
+            <option value='S'>Summer</option>
+        </select>
     </fieldset>
     <fieldset>
-      <input placeholder="DOB" name="dob" id="dob" type="text" tabindex="3" required>
-    </fieldset>
-    <fieldset>
-      <input placeholder="Tuition" name="tuition" id="tuition" type="text" tabindex="3" required>
+      <input placeholder="Year" type=text name="year" id="year" required>
     </fieldset>
     <fieldset>
       <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
