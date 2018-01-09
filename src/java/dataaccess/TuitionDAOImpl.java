@@ -38,7 +38,7 @@ public class TuitionDAOImpl implements TuitionDAO{
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try{
-            DataSource ds = new DataSource();
+            DataSource ds = DataSource.getInstance();
             con = ds.createConnection();
             pstmt = con.prepareStatement( GET_ALL_TUITIONS);
             rs = pstmt.executeQuery();
@@ -84,7 +84,7 @@ public class TuitionDAOImpl implements TuitionDAO{
         ResultSet rs = null;
         Tuition tuition = null;
         try{
-            DataSource ds = new DataSource();
+            DataSource ds = DataSource.getInstance();
             con = ds.createConnection();
             pstmt = con.prepareStatement( GET_TUITION_BY_STUDENT_NUMBER);
             pstmt.setInt(1,studentnumber);
@@ -129,7 +129,7 @@ public class TuitionDAOImpl implements TuitionDAO{
      */
     @Override
     public void addTuition(Tuition tuition) {
-        try( Connection con = new DataSource().createConnection();
+        try( Connection con = DataSource.getInstance().createConnection();
                 PreparedStatement pstmt = con.prepareStatement( INSERT_TUITIONS);){
             pstmt.setInt(1, tuition.getStudentNum());
             pstmt.setDouble(2, tuition.getPaid());
@@ -151,7 +151,7 @@ public class TuitionDAOImpl implements TuitionDAO{
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try{
-            DataSource ds = new DataSource();
+            DataSource ds = DataSource.getInstance();
             con = ds.createConnection();    
             pstmt = con.prepareStatement(UPDATE_PAID);
             pstmt.setDouble(1,paid);
@@ -193,7 +193,7 @@ public class TuitionDAOImpl implements TuitionDAO{
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try{
-            DataSource ds = new DataSource();
+            DataSource ds = DataSource.getInstance();
             con = ds.createConnection();    
             pstmt = con.prepareStatement(DELETE_TUITION);
             pstmt.setDouble(1,studentNumber);

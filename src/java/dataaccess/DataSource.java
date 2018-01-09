@@ -16,6 +16,16 @@ import javax.naming.NamingException;
  * @see https://tomcat.apache.org/tomcat-8.0-doc/jndi-resources-howto.html
  */
 public class DataSource {
+    //Singleton pattern
+    private static DataSource instance = null;
+    private DataSource() {}
+    
+    public static DataSource getInstance() {
+      if(instance == null) {
+         instance = new DataSource();
+      }
+      return instance;
+    }
 
     public Connection createConnection() {
         Connection connection = null;

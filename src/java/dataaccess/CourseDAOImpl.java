@@ -38,7 +38,7 @@ public class CourseDAOImpl implements CourseDAO{
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try{
-            DataSource ds = new DataSource();
+            DataSource ds = DataSource.getInstance();
             con = ds.createConnection();
             pstmt = con.prepareStatement( GET_ALL_COURSES);
             rs = pstmt.executeQuery();
@@ -79,7 +79,7 @@ public class CourseDAOImpl implements CourseDAO{
 
     @Override
     public void addCourse(Course course) {
-        try( Connection con = new DataSource().createConnection();
+        try( Connection con = DataSource.getInstance().createConnection();
                 PreparedStatement pstmt = con.prepareStatement( INSERT_COURSES);){
             pstmt.setString(1, course.getCode());
             pstmt.setString(2, course.getName());
@@ -92,7 +92,7 @@ public class CourseDAOImpl implements CourseDAO{
     
     @Override
     public void registerCourse(int sudentNumber, String courseNumber, String term, int year) {
-        try( Connection con = new DataSource().createConnection();
+        try( Connection con = DataSource.getInstance().createConnection();
             PreparedStatement pstmt = con.prepareStatement( REGISTER_COURSE);){
             pstmt.setInt(1, sudentNumber);
             pstmt.setString(2, courseNumber);
@@ -111,7 +111,7 @@ public class CourseDAOImpl implements CourseDAO{
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try{
-            DataSource ds = new DataSource();
+            DataSource ds = DataSource.getInstance();
             con = ds.createConnection();
             
             pstmt = con.prepareStatement(GET_COURSE_BY_NUMBER );
@@ -160,7 +160,7 @@ public class CourseDAOImpl implements CourseDAO{
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try{
-            DataSource ds = new DataSource();
+            DataSource ds = DataSource.getInstance();
             con = ds.createConnection();
             
             pstmt = con.prepareStatement(GET_COURSE_REGISTRATION_BY_STUDENT_NUMBER );

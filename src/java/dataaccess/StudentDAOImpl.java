@@ -47,7 +47,7 @@ public class StudentDAOImpl implements StudentDAO{
          
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-mm-dd");
         try{
-            DataSource ds = new DataSource();
+            DataSource ds = DataSource.getInstance();
             con = ds.createConnection();
             pstmt = con.prepareStatement(GET_ALL_STUDENTS);
             rs = pstmt.executeQuery();
@@ -83,7 +83,7 @@ public class StudentDAOImpl implements StudentDAO{
 
   @Override
     public void addStudent(Student student) {
-        try( Connection con = new DataSource().createConnection();
+        try( Connection con = DataSource.getInstance().createConnection();
                 PreparedStatement pstmt = con.prepareStatement(INSERT_STUDENTS);){
                 pstmt.setInt(1, student.getStudentNum());
                 pstmt.setString(2, student.getFName());
@@ -105,7 +105,7 @@ public class StudentDAOImpl implements StudentDAO{
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try{
-            DataSource ds = new DataSource();
+            DataSource ds = DataSource.getInstance();
             con = ds.createConnection();
             
             pstmt = con.prepareStatement(SELECT_STUDENTS_BY_ID );
@@ -155,7 +155,7 @@ public class StudentDAOImpl implements StudentDAO{
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try{
-            DataSource ds = new DataSource();
+            DataSource ds = DataSource.getInstance();
             con = ds.createConnection();    
             pstmt = con.prepareStatement(UPDATE_STUDENT);
             pstmt.setString(1,firstName);
@@ -209,7 +209,7 @@ public class StudentDAOImpl implements StudentDAO{
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try{
-            DataSource ds = new DataSource();
+            DataSource ds = DataSource.getInstance();
             con = ds.createConnection();    
             pstmt = con.prepareStatement(DELETE_STUDENT);
             pstmt.setInt(1,studentNumber);            

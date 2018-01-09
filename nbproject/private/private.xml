@@ -2,6 +2,26 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/dataaccess/StudentDAO.java</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/view/ResourceFiles/RegisterCourse.html</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/transferobjects/Course.java</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/dataaccess/CourseDAO.java</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/business/StudentsLogic.java</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/view/UITuitionView.java</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/view/ResourceFiles/UpdateStudent.html</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/dataaccess/CourseDAOImpl.java</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/dataaccess/StudentDAOImpl.java</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/dataaccess/TuitionDAOImpl.java</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/view/UIStudentView.java</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/view/StudentsView.java</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/view/ResourceFiles/SearchStudent.html</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/web/index.html</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/view/CoursesView.java</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/transferobjects/Student.java</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/view/ResourceFiles/AddStudent.html</file>
+            <file>file:/C:/Users/rasna/Documents/NetBeansProjects/Registrar/src/java/dataaccess/TuitionDAO.java</file>
+        </group>
     </open-files>
 </project-private>
